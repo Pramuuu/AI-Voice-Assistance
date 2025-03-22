@@ -1,76 +1,90 @@
-# AI-Voice-Assistance
+# Audio Transcription and Text-to-Speech (TTS) System
 
-# End-to-End AI Voice Assistant
-
-## Overview
-This project implements an end-to-end AI voice assistant capable of:
-1. Converting spoken audio into text (**Voice-to-Text**).
-2. Generating a response using a **Large Language Model (LLM)**.
-3. Converting the generated text back into speech (**Text-to-Speech**).
-
-The workflow is divided into three main steps: **Voice-to-Text Conversion**, **Text Input into LLM**, and **Text-to-Speech Conversion**.
+## Project Overview
+This project demonstrates an integrated pipeline for audio transcription and text-to-speech (TTS) synthesis. It combines multiple state-of-the-art models and libraries to process audio files, transcribe them into text, and generate synthetic speech from the processed text. The system also includes Voice Activity Detection (VAD) for filtering noise and non-speech segments.
 
 ---
 
 ## Features
 
-### 1. Voice-to-Text Conversion (Using Whisper)
-- **Libraries Used**:
-  - `wave`: To read and process WAV audio files.
-  - `webrtcvad`: For Voice Activity Detection (VAD) to filter non-speech portions.
-  - `pydub`: For audio file conversion and manipulation (e.g., M4A or MP3 to WAV).
-  - `faster-whisper`: Efficient implementation of the Whisper model for transcription.
-- **Implementation**:
-  - **Audio Conversion**: Converts M4A/MP3 files to WAV format at 32 kHz mono channel.
-  - **VAD Filtering**: Removes non-speech frames using WebRTC VAD for noise reduction.
-  - **Transcription**: Uses the Whisper model to convert filtered audio into text.
-- **Advantages**:
-  - **Efficiency**: Real-time transcription with faster-whisper.
-  - **Accuracy**: Improved transcription quality with VAD.
+### 1. Audio Format Conversion
+- Converts audio files (M4A, MP3) to WAV format with the required specifications (32kHz sample rate, mono).
+
+### 2. Voice Activity Detection (VAD)
+- Filters out non-speech audio segments using `webrtcvad`.
+
+### 3. Audio Transcription
+- Utilizes the `faster-whisper` model to transcribe filtered audio into text.
+
+### 4. Text Processing
+- Processes the transcribed text to generate concise responses using the LLaMA language model.
+
+### 5. Text-to-Speech (TTS)
+- Converts processed text into synthetic speech using Microsoft's `SpeechT5` model and HiFi-GAN vocoder.
+
+### 6. Tunable Parameters
+- Allows customization of voice pitch, speed, gender, and VAD threshold.
 
 ---
 
-### 2. Text Input into LLM (Using LLaMA)
-- **Libraries Used**:
-  - `torch`: For tensor computation and GPU acceleration.
-  - `transformers`: For loading and interacting with pre-trained models.
-- **Implementation**:
-  - **Model Loading**: LLaMA is loaded using Hugging Face's `AutoTokenizer` and `AutoModelForCausalLM`.
-  - **Tokenization & Inference**: Tokenizes transcribed text and generates responses with customizable parameters (e.g., `top_k`, `top_p`, `temperature`).
-  - **Response Processing**: Cleans generated output for conciseness.
-- **Advantages**:
-  - **Customizability**: Fine-tuning generation parameters for creative and relevant responses.
-  - **Scalability**: GPU support for real-time applications.
+## Purpose
+The primary goal of this project is to create a seamless workflow for:
+1. Transcribing spoken content into text with high accuracy.
+2. Generating natural and customizable synthetic speech from text descriptions or prompts.
 
----
-
-### 3. Text-to-Speech Conversion (Using Parler TTS)
-- **Libraries Used**:
-  - `parler-tts`: For speech synthesis from text.
-  - `soundfile`: For handling audio file operations.
-- **Implementation**:
-  - **Limiting Sentences**: Ensures concise output for synthesized speech.
-  - **VAD Application**: Filters low-energy segments for clarity.
-  - **Text-to-Speech Conversion**: Converts text into speech with adjustable parameters (pitch, speed, gender).
-- **Advantages**:
-  - **Flexibility**: Customizable speech characteristics for user preferences.
-  - **Clarity**: Ensures only relevant segments are synthesized.
-
----
-
-## Models Used
-1. **Whisper (faster-whisper)**: Optimized for fast and accurate speech-to-text transcription.
-2. **LLaMA (open_llama_3b)**: Generates contextually relevant and coherent text responses.
-3. **Parler TTS**: Produces high-quality, natural-sounding speech with adjustable parameters.
+This system can be used in various applications, such as content creation, accessibility tools, virtual assistants, and more.
 
 ---
 
 ## Technologies Used
-- **Libraries**: `faster-whisper`, `torch`, `transformers`, `pydub`, `webrtcvad`, `soundfile`, `parler-tts`.
-- **Models**: Whisper, LLaMA, Parler TTS.
+
+### Libraries
+- `webrtcvad`: For Voice Activity Detection.
+- `pydub`: For audio format conversion and manipulation.
+- `faster-whisper`: A lightweight Whisper model for transcription.
+- `transformers`: To leverage the LLaMA language model and Microsoft's SpeechT5 model.
+- `soundfile` and `torchaudio`: For audio processing.
+- `datasets`: For loading speaker embeddings.
+
+### Models
+- **Whisper model** (`faster-whisper`) for transcription.
+- **LLaMA language model** for text generation.
+- **SpeechT5** and **HiFi-GAN** for text-to-speech synthesis.
 
 ---
 
-## Conclusion
-This AI voice assistant pipeline integrates cutting-edge models for **speech transcription**, **language understanding**, and **speech synthesis**, providing an efficient and flexible solution for voice-based applications. Features like **VAD**, **model optimization**, and **customizable parameters** ensure high-quality outputs tailored to diverse use cases.
+## Workflow
+
+### 1. Audio Input
+- Provide an audio file in M4A or MP3 format.
+- The file is converted to WAV format with the required specifications.
+
+### 2. Voice Activity Detection
+- The WAV file undergoes VAD filtering to remove non-speech segments.
+
+### 3. Transcription
+- Filtered audio is transcribed into text using the Whisper model.
+
+### 4. Text Processing
+- The transcribed text is processed by the LLaMA language model to generate concise responses.
+
+### 5. Text-to-Speech Synthesis
+- The processed text is synthesized into speech using SpeechT5 and HiFi-GAN.
+- The resulting audio file is saved in WAV format.
+
+---
+
+## Outcomes
+- Accurate transcription of audio files into text.
+- Natural and customizable synthetic speech generation.
+- Integration of VAD ensures clean and concise audio processing.
+
+---
+
+## Usage Instructions
+
+1. Clone the repository and install the required libraries:
+   ```bash
+   pip install webrtcvad pydub faster-whisper transformers torch torchaudio soundfile datasets accelerate sentencepiece opencv-python
+
 
